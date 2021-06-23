@@ -13,10 +13,15 @@ app.use(bodyParser.json({extended: true, limit: '50mb'}))
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader(
-        'Access-Control-Allow-Origin',
-        ['http://localhost:8080', 'https://resume-maker-uz.netlify.app', 'https://resume.mirjalolnorkulov.uz']
-    );
+    const allowedOrigins = [
+        'http://localhost:8080',
+        'https://resume-maker-uz.netlify.app',
+        'https://resume.mirjalolnorkulov.uz'
+    ]
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
