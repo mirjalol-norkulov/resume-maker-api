@@ -58,7 +58,7 @@ app.post('/export-pdf', (req, res) => {
                 console.log('wrote the file successfully');
 
                 (async () => {
-                    const browser = await puppeteer.launch();
+                    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
                     const page = await browser.newPage();
                     await page.goto(`${__dirname}/CV.html`, {
                         waitUntil: 'networkidle2',
