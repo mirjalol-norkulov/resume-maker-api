@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs');
@@ -44,9 +45,9 @@ app.get('/', (req, res) => {
 app.post('/export-pdf', (req, res) => {
     const templateHTML = req.body.html;
     const fullHTML = getFullHTML(templateHTML)
-    let path = 'CV.html'
+    let htmlFilePath = 'CV.html'
     let buffer = Buffer.from(fullHTML)
-    fs.open(path, 'w', function (err, fd) {
+    fs.open(htmlFilePath, 'w', function (err, fd) {
         if (err) {
             throw 'could not open file: ' + err;
         }
@@ -58,9 +59,9 @@ app.post('/export-pdf', (req, res) => {
                 console.log('wrote the file successfully');
 
                 (async () => {
-                    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+                    const browser = await puppeteer.launch({args: ['--no-sandbox']});
                     const page = await browser.newPage();
-                    await page.goto(`${__dirname}/CV.html`, {
+                    await page.goto(`file:${path.join(__dirname, 'CV.html')}`, {
                         waitUntil: 'networkidle2',
                     });
                     await page.pdf({path: 'CV.pdf', format: 'a4', printBackground: true});
